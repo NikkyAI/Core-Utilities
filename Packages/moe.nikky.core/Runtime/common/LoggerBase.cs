@@ -2,7 +2,7 @@
 using UnityEngine;
 using VRC.SDKBase;
 
-namespace nikkyai.Base
+namespace nikkyai.common
 {
     public abstract class LoggerBase : EventBase
     {

@@ -1,7 +1,7 @@
 ﻿using Texel;
 using VRC.SDKBase;
 
-namespace nikkyai.Base
+namespace nikkyai.common
 {
     
     public abstract class ACLBase: LoggerBase
