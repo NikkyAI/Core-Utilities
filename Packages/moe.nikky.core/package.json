@@ -6,8 +6,8 @@
   "gitDependencies": {},
   "vpmDependencies": {
     "com.llealloo.audiolink": "2.1.x",
-    "com.texelsaur.access": "1.2.x",
-    "com.texelsaur.misc": "1.0.x"
+    "com.texelsaur.access": "^1.2.4",
+    "com.texelsaur.misc": "^1.7.1"
   },
   "author": {
     "name": "NikkyAI",

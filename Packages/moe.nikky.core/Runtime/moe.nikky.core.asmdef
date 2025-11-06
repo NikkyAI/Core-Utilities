@@ -1,16 +1,11 @@
 {
   "name": "moe.nikky.core",
-  "rootNamespace": "nikkyai",
   "references": [
     "VRC.SDK3",
+    "VRC.Udon",
     "VRC.SDKBase",
     "UdonSharp.Runtime",
-    "com.texelsaur.common",
-    "com.texelsaur.misc",
-    "AudioLink",
-    "VRC.Udon",
-    "Unity.TextMeshPro",
-    "VRC.Udon.Serialization.OdinSerializer"
+    "com.texelsaur.common"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
