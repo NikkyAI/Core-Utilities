@@ -3,6 +3,7 @@
   "displayName": "NikkyAI - Core",
   "version": "0.0.1",
   "description": "shared base classes and utilities",
+  "changelogUrl": "https://github.com/NikkyAI/Core-Utilities/releases",
   "gitDependencies": {},
   "vpmDependencies": {
     "com.llealloo.audiolink": "2.1.x",
