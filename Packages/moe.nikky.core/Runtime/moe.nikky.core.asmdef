@@ -1,5 +1,6 @@
 {
   "name": "moe.nikky.core",
+  "rootNamespace": "nikkyai",
   "references": [
     "VRC.SDK3",
     "VRC.Udon",
