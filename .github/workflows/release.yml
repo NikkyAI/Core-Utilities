@@ -8,9 +8,7 @@ on:
         required: true
         type: choice
         options:
-          - moe.nikky.kinetic-controls
-          - moe.nikky.kinetic-controls-audiolink
-
+          - moe.nikky.core
 jobs:
 
   # Validate Repository Configuration
