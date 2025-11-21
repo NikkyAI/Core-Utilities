@@ -1,14 +1,14 @@
 ﻿using Texel;
 using VRC.SDKBase;
 
-namespace nikkyai.common
+namespace nikkyai.toggle.common
 {
     
     public abstract class ACLBase: LoggerBase
     {
         // protected AccessControl accessControl;
         protected virtual AccessControl AccessControl { get; set; }
-        protected abstract bool UseACL { get; }
+        protected abstract bool EnforceACL { get; set; }
 
         protected bool isAuthorized;
 
@@ -16,7 +16,7 @@ namespace nikkyai.common
         {
             base._PostInit();
             
-            if (UseACL)
+            if (EnforceACL)
             {
                 if (AccessControl)
                 {
@@ -57,6 +57,11 @@ namespace nikkyai.common
         {
             get => AccessControl;
             set => AccessControl = value;
+        }
+        public virtual bool EditorEnforceACL
+        {
+            get => EnforceACL;
+            set => EnforceACL = value;
         }
 #endif
     }
