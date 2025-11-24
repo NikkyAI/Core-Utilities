@@ -5,7 +5,7 @@ using UdonSharp;
 
 namespace nikkyai.driver
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public abstract class IntDriver: LoggerBase
     {
         public abstract void UpdateInt(int value);

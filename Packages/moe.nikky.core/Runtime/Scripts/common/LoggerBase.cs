@@ -17,11 +17,6 @@ namespace nikkyai.common
         protected void LogError(string message)
         {
             Debug.LogError($"[{LogPrefix}] {message}");
-// #if UNITY_EDITOR && !COMPILER_UDONSHARP
-//             Debug.LogError($"[{LogPrefix}] {message}", gameObject);
-// #else
-//             Debug.LogError($"[{LogPrefix}] {message}");
-// #endif
             if (Utilities.IsValid(DebugLog))
             {
                 DebugLog._WriteError(
@@ -34,11 +29,6 @@ namespace nikkyai.common
         protected void LogWarning(string message)
         {
             Debug.LogWarning($"[{LogPrefix}] {message}");
-// #if UNITY_EDITOR && !COMPILER_UDONSHARP
-//             Debug.LogWarning($"[{LogPrefix}] {message}", gameObject);
-// #else
-//             Debug.LogWarning($"[{LogPrefix}] {message}");
-// #endif
             if (Utilities.IsValid(DebugLog))
             {
                 DebugLog._WriteError(
@@ -51,11 +41,6 @@ namespace nikkyai.common
         protected void Log(string message)
         {
             Debug.Log($"[{LogPrefix}] {message}");
-// #if UNITY_EDITOR && !COMPILER_UDONSHARP
-//             Debug.Log($"[{LogPrefix}] {message}", gameObject);
-// #else
-//             Debug.Log($"[{LogPrefix}] {message}");
-// #endif
             if (Utilities.IsValid(DebugLog))
             {
                 DebugLog._Write(

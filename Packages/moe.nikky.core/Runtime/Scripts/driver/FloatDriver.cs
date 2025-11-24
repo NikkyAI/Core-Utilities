@@ -3,7 +3,7 @@ using UdonSharp;
 
 namespace nikkyai.driver
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public abstract class FloatDriver: LoggerBase
     {
         public abstract void UpdateFloat(float value);

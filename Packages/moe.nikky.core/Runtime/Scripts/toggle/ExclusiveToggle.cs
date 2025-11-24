@@ -15,6 +15,7 @@ namespace nikkyai.toggle
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class ExclusiveToggle : ACLBase
     {
+        [SerializeField] private Transform drivers;
         [SerializeField, Min(0)] private int defaultIndex;
         [SerializeField] private int[] remapValues = { };
 
@@ -71,7 +72,7 @@ namespace nikkyai.toggle
 
         #endregion
 
-        private InteractCallback[] _toggles = { };
+        private InteractCallback[] _interactCallbacks = { };
         private IntDriver[] _intDrivers;
         private BoolDriver[][] _boolDrivers;
 
@@ -130,9 +131,9 @@ namespace nikkyai.toggle
         protected override void _Init()
         {
             SetupComponents();
-            for (var i = 0; i < _toggles.Length; i++)
+            for (var i = 0; i < _interactCallbacks.Length; i++)
             {
-                _toggles[i]._Register(
+                _interactCallbacks[i]._Register(
                     eventIndex: InteractCallback.EVENT_INTERACT,
                     handler: this,
                     eventName: nameof(_OnInteract),
@@ -144,24 +145,27 @@ namespace nikkyai.toggle
         private void SetupComponents()
         {
             _syncedIndex = defaultIndex;
-            _intDrivers = GetComponents<IntDriver>();
-            _toggles = GetComponentsInChildren<InteractCallback>();
-            _boolDrivers = new BoolDriver[_toggles.Length][];
-            for (var i = 0; i < _toggles.Length; i++)
+            _intDrivers = drivers.GetComponents<IntDriver>()
+                .AddRange(
+                drivers.GetComponentsInChildren<IntDriver>()
+                );
+            _interactCallbacks = GetComponentsInChildren<InteractCallback>();
+            _boolDrivers = new BoolDriver[_interactCallbacks.Length][];
+            for (var i = 0; i < _interactCallbacks.Length; i++)
             {
-                _toggles[i].Index = i;
-                _boolDrivers[i] = _toggles[i].GetComponents<BoolDriver>()
+                _interactCallbacks[i].Index = i;
+                _boolDrivers[i] = _interactCallbacks[i].GetComponents<BoolDriver>()
                     .AddRange(
-                    _toggles[i].GetComponentsInChildren<BoolDriver>()
+                    _interactCallbacks[i].GetComponentsInChildren<BoolDriver>()
                     );
             }
         }
 
         protected override void AccessChanged()
         {
-            for (var i = 0; i < _toggles.Length; i++)
+            for (var i = 0; i < _interactCallbacks.Length; i++)
             {
-                _toggles[i].DisableInteractive = !isAuthorized;
+                _interactCallbacks[i].DisableInteractive = !isAuthorized;
             }
         }
         public void TakeOwnership()
@@ -188,12 +192,14 @@ namespace nikkyai.toggle
         {
         }
 
+        // ReSharper disable InconsistentNaming
         [NonSerialized] private int prevDefault = -1;
         [NonSerialized] private int[] prevRemap = { };
         [NonSerialized] private AccessControl prevAccessControl;
         [NonSerialized] private bool prevEnforceACL;
         [NonSerialized] private DebugLog prevDebugLog;
         [NonSerialized] private bool childrenInitialized = false;
+        // ReSharper restore InconsistentNaming
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
 
         private void OnValidate()

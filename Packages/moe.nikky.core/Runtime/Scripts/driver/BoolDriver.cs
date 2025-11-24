@@ -3,7 +3,7 @@ using UdonSharp;
 
 namespace nikkyai.driver
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public abstract class BoolDriver: LoggerBase
     {
         public abstract void UpdateBool(bool value);
