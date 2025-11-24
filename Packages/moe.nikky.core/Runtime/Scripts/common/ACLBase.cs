@@ -1,7 +1,7 @@
 ﻿using Texel;
 using VRC.SDKBase;
 
-namespace nikkyai.toggle.common
+namespace nikkyai.common
 {
     
     public abstract class ACLBase: LoggerBase

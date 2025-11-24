@@ -1,6 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
-using nikkyai.toggle.common;
+using nikkyai.common;
 using UdonSharp;
 
 namespace nikkyai.driver

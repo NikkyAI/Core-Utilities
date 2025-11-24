@@ -25,7 +25,7 @@ SOFTWARE.
 using System;
 using UnityEngine;
 
-namespace nikkyai.toggle.ArrayExtensions
+namespace nikkyai.ArrayExtensions
 {
     /// <summary>
     /// Array extension methods for adding partial feature set from List&lt;T&gt; and System.Linq, including replacements to methods not supported by Udon/UdonSharp and additional custom methods to UdonSharp

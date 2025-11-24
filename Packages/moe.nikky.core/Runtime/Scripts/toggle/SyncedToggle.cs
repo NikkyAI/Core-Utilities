@@ -1,6 +1,6 @@
 ﻿using System;
+using nikkyai.common;
 using nikkyai.driver;
-using nikkyai.toggle.common;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using nikkyai.ArrayExtensions;
+using nikkyai.common;
 using nikkyai.driver;
-using nikkyai.toggle.common;
 using Texel;
 using UdonSharp;
 using UnityEngine;
@@ -149,7 +150,10 @@ namespace nikkyai.toggle
             for (var i = 0; i < _toggles.Length; i++)
             {
                 _toggles[i].Index = i;
-                _boolDrivers[i] = _toggles[i].GetComponents<BoolDriver>();
+                _boolDrivers[i] = _toggles[i].GetComponents<BoolDriver>()
+                    .AddRange(
+                    _toggles[i].GetComponentsInChildren<BoolDriver>()
+                    );
             }
         }
 
