@@ -10,7 +10,7 @@ using VRC.Udon;
 
 namespace nikkyai.toggle
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class LocalToggle : ACLBase
     {
         [Tooltip(
