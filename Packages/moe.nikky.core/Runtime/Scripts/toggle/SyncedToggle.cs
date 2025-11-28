@@ -1,6 +1,8 @@
 ﻿using System;
+using nikkyai.ArrayExtensions;
 using nikkyai.common;
 using nikkyai.driver;
+using nikkyai.Kinetic_Controls;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -15,7 +17,7 @@ using VRC.Core;
 namespace nikkyai.toggle
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public class SyncedToggle : ACLBase
+    public class SyncedToggle : BaseSyncedBehaviour
     {
         [Tooltip(
              "The button will initialize into this value, toggle this for elements that should be enabled by default"),
@@ -28,7 +30,13 @@ namespace nikkyai.toggle
         // [SerializeField]
         // private string label2;
 
-        [SerializeField] private TextMeshPro tmpLabel;
+        
+        [Header("Drivers")] // header
+        [SerializeField] private Transform valueIndicator;
+
+        [SerializeField] private Transform isAuthorizedIndicator;
+
+        #region ACL
 
         [Header("Access Control")] // header
         [SerializeField]
@@ -40,8 +48,7 @@ namespace nikkyai.toggle
             set => enforceACL = value;
         }
 
-        [Tooltip("ACL used to check who can use the toggle"),
-         SerializeField]
+        [Tooltip("ACL used to check who can use the toggle")] [SerializeField]
         private AccessControl accessControl;
 
         protected override AccessControl AccessControl
@@ -50,9 +57,15 @@ namespace nikkyai.toggle
             set => accessControl = value;
         }
 
+        #endregion
+
+        #region Debug
+
         [Header("Debug")] // header
         [SerializeField]
         private DebugLog debugLog;
+
+        protected override string LogPrefix => $"{nameof(SyncedToggle)} {name}";
 
         protected override DebugLog DebugLog
         {
@@ -60,33 +73,38 @@ namespace nikkyai.toggle
             set => debugLog = value;
         }
 
-        protected override string LogPrefix => nameof(SyncedToggle);
+        #endregion
 
-        [Header("Internals")] // header
-        // [Tooltip(
-        //     "This GameObject gets turned off if `Off If Not Usable` is TRUE.\n\n!!MAKE SURE THERE ARE NO SCRIPTS ON THIS OBJECT!!\nscripts do not run if they get turned off.")]
-        // [SerializeField]
-        // private GameObject button;
-
-        // [Tooltip(
-        //     "This Collider gets turned off if `Off If Not Usable` is TRUE.\nIf you using UI buttons, leave this empty.")]
-        // [SerializeField]
-        // private Collider buttonCollider;
+        [Header("State")] // header
         
-        [FormerlySerializedAs("state0")] [SerializeField] private Transform stateDisabledUnauthorized;
-        [FormerlySerializedAs("state1")] [SerializeField] private Transform stateEnabledUnauthorized;
-        [FormerlySerializedAs("state2")] [SerializeField] private Transform stateDisabledAuthorized;
-        [FormerlySerializedAs("state3")] [SerializeField] private Transform stateEnabledAuthorized;
-
         [UdonSynced] private bool _isOn = false;
 
+        [SerializeField, UdonSynced]
+        private bool synced = true;
+
+        public override bool Synced
+        {
+            get => synced;
+            set
+            {
+                if (!isAuthorized) return;
+                
+                TakeOwnership();
+                synced = value;
+                
+                RequestSerialization();
+            }
+        }
+        
         public const int EVENT_UPDATE = 0;
         public const int EVENT_COUNT = 1;
 
         protected override int EventCount => EVENT_COUNT;
 
-        private BoolDriver[] _boolDrivers = { };
+        // private BoolDriver[] _boolDrivers = { };
         
+        private BoolDriver[] _valueBoolDrivers = { };
+        private BoolDriver[] _isAuthorizedBoolDrivers = { };
         void Start()
         {
             _EnsureInit();
@@ -109,8 +127,6 @@ namespace nikkyai.toggle
             // if (button != null) button.SetActive(!offIfNotUsable);
             // if (buttonCollider != null) buttonCollider.enabled = !offIfNotUsable;
 
-            _boolDrivers = GetComponents<BoolDriver>();
-
             // if (!string.IsNullOrEmpty(label))
             // {
             //     var labelText = (label.Trim() + "\n" + label2.Trim()).Trim('\n', ' ');
@@ -122,12 +138,30 @@ namespace nikkyai.toggle
             // }
 
             _isOn = defaultValue;
+            
+            _valueBoolDrivers = valueIndicator.GetComponents<BoolDriver>()
+                .AddRange(
+                    valueIndicator.GetComponentsInChildren<BoolDriver>()
+                );
+            if (isAuthorizedIndicator)
+            {
+                _isAuthorizedBoolDrivers = isAuthorizedIndicator.GetComponents<BoolDriver>()
+                    .AddRange(
+                        isAuthorizedIndicator.GetComponentsInChildren<BoolDriver>()
+                    );
+            }
+            
             OnDeserialization();
         }
 
         protected override void AccessChanged()
         {
             DisableInteractive = !isAuthorized;
+            
+            for (var i = 0; i < _isAuthorizedBoolDrivers.Length; i++)
+            {
+                _isAuthorizedBoolDrivers[i].UpdateBool(isAuthorized);
+            }
             _UpdateState();
         }
 
@@ -141,7 +175,10 @@ namespace nikkyai.toggle
 
             _isOn = newValue;
 
-            RequestSerialization();
+            if (synced)
+            {
+                RequestSerialization();
+            }
             OnDeserialization();
         }
 
@@ -153,7 +190,10 @@ namespace nikkyai.toggle
             }
 
             _isOn = defaultValue;
-            RequestSerialization();
+            if (synced)
+            {
+                RequestSerialization();
+            }
             OnDeserialization();
         }
 
@@ -173,40 +213,21 @@ namespace nikkyai.toggle
 
             _isOn = !_isOn;
             _UpdateState();
-            RequestSerialization();
+            if (synced)
+            {
+                RequestSerialization();
+            }
         }
 
         private void _UpdateState()
         {
+            if (!isAuthorized) return;
             Log($"_UpdateState {_isOn}");
-            // if (stateDisabledUnauthorized) stateDisabledUnauthorized.localScale = _isOn ? Vector3.zero : Vector3.one;
-            // if (stateEnabledUnauthorized) stateEnabledUnauthorized.localScale = _isOn ? Vector3.one : Vector3.zero;
-            // if (stateDisabledAuthorized) stateDisabledAuthorized.localScale = Vector3.zero;
-            // if (stateEnabledAuthorized) stateEnabledAuthorized.localScale = Vector3.zero;
             
-            for (var i = 0; i < _boolDrivers.Length; i++)
+            for (var i = 0; i < _valueBoolDrivers.Length; i++)
             {
-                _boolDrivers[i].UpdateBool(_isOn);
+                _valueBoolDrivers[i].UpdateBool(_isOn);
             }
-
-            _UpdateHandlers(EVENT_UPDATE, _isOn);
-
-            if (isAuthorized)
-            {
-                SetState(_isOn ? 3 : 2);
-            }
-            else
-            {
-                SetState(_isOn ? 1 : 0);
-            }
-        }
-
-        private void SetState(int state)
-        {
-            if (stateDisabledUnauthorized) stateDisabledUnauthorized.localScale = state == 0 ? Vector3.one : Vector3.zero;
-            if (stateEnabledUnauthorized) stateEnabledUnauthorized.localScale = state == 1 ? Vector3.one : Vector3.zero;
-            if (stateDisabledAuthorized) stateDisabledAuthorized.localScale = state == 2 ? Vector3.one : Vector3.zero;
-            if (stateEnabledAuthorized) stateEnabledAuthorized.localScale = state == 3 ? Vector3.one : Vector3.zero;
         }
 
         public override void OnDeserialization()
@@ -274,88 +295,6 @@ namespace nikkyai.toggle
             // {
             //     buttonCollider = button.GetComponent<Collider>();
             // }
-
-            if (tmpLabel == null)
-            {
-                tmpLabel = transform.Find("Label").GetComponent<TextMeshPro>();
-            }
-
-            if (stateDisabledUnauthorized == null)
-            {
-                foreach (Transform child in transform)
-                {
-                    if (child.name.EndsWith("S0"))
-                    {
-                        stateDisabledUnauthorized = child;
-                        stateDisabledUnauthorized.localScale = Vector3.one;
-                        stateDisabledUnauthorized.MarkDirty();
-                        break;
-                    }
-                }
-            }
-
-            if (stateEnabledUnauthorized == null)
-            {
-                foreach (Transform child in transform)
-                {
-                    if (child.name.EndsWith("S1"))
-                    {
-                        stateEnabledUnauthorized = child;
-                        stateEnabledUnauthorized.MarkDirty();
-                        break;
-                    }
-                }
-            }
-
-            if (stateDisabledAuthorized == null)
-            {
-                foreach (Transform child in transform)
-                {
-                    if (child.name.EndsWith("S2"))
-                    {
-                        stateDisabledAuthorized = child;
-                        stateDisabledAuthorized.MarkDirty();
-                        break;
-                    }
-                }
-            }
-
-            if (stateEnabledAuthorized == null)
-            {
-                foreach (Transform child in transform)
-                {
-                    if (child.name.EndsWith("S3"))
-                    {
-                        stateEnabledAuthorized = child;
-                        stateEnabledAuthorized.MarkDirty();
-                        break;
-                    }
-                }
-            }
-
-            if (stateDisabledUnauthorized)
-            {
-                stateDisabledUnauthorized.localScale = Vector3.one;
-                stateDisabledUnauthorized.MarkDirty();
-            }
-
-            if (stateEnabledUnauthorized)
-            {
-                stateEnabledUnauthorized.localScale = Vector3.zero;
-                stateEnabledUnauthorized.MarkDirty();
-            }
-
-            if (stateDisabledAuthorized)
-            {
-                stateDisabledAuthorized.localScale = Vector3.zero;
-                stateDisabledAuthorized.MarkDirty();
-            }
-
-            if (stateEnabledAuthorized)
-            {
-                stateEnabledAuthorized.localScale = Vector3.zero;
-                stateEnabledAuthorized.MarkDirty();
-            }
 
             this.MarkDirty();
         }

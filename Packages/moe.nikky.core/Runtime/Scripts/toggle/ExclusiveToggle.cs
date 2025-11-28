@@ -4,21 +4,24 @@ using System.Runtime.CompilerServices;
 using nikkyai.ArrayExtensions;
 using nikkyai.common;
 using nikkyai.driver;
+using nikkyai.Kinetic_Controls;
 using Texel;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC;
 using VRC.SDKBase;
 
 namespace nikkyai.toggle
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public class ExclusiveToggle : ACLBase
+    public class ExclusiveToggle : BaseSyncedBehaviour
     {
-        [SerializeField] private Transform drivers;
         [SerializeField, Min(0)] private int defaultIndex;
+        [SerializeField] private bool clickOnActiveDisables = false;
+        [SerializeField, Min(0)] private int disabledIndex = 0;
         [SerializeField] private int[] remapValues = { };
-
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int RemapIndex(int index)
         {
@@ -31,6 +34,11 @@ namespace nikkyai.toggle
                 return index;
             }
         }
+
+        [Header("Drivers")] // header
+        [FormerlySerializedAs("drivers")]
+        [SerializeField] private Transform selectionIndicator;
+        [SerializeField] private Transform isAuthorizedIndicator;
 
         #region ACL
 
@@ -75,9 +83,28 @@ namespace nikkyai.toggle
         private InteractCallback[] _interactCallbacks = { };
         private IntDriver[] _intDrivers;
         private BoolDriver[][] _boolDrivers;
+        private BoolDriver[] _isAuthorizedBoolDrivers = { };
 
 
-        [UdonSynced, FieldChangeCallback(nameof(SyncedIndex))]
+        [Header("State")] // header
+        [SerializeField, UdonSynced]
+        private bool synced = true;
+
+        public override bool Synced
+        {
+            get => synced;
+            set
+            {
+                if (!isAuthorized) return;
+                
+                TakeOwnership();
+                synced = value;
+                
+                RequestSerialization();
+            }
+        }
+
+        [UdonSynced]
         private int _syncedIndex;
 
         public int SyncedIndex
@@ -145,18 +172,26 @@ namespace nikkyai.toggle
         private void SetupComponents()
         {
             _syncedIndex = defaultIndex;
-            _intDrivers = drivers.GetComponents<IntDriver>()
+            _intDrivers = selectionIndicator.GetComponents<IntDriver>()
                 .AddRange(
-                drivers.GetComponentsInChildren<IntDriver>()
+                selectionIndicator.GetComponentsInChildren<IntDriver>()
                 );
             _interactCallbacks = GetComponentsInChildren<InteractCallback>();
             _boolDrivers = new BoolDriver[_interactCallbacks.Length][];
+            
             for (var i = 0; i < _interactCallbacks.Length; i++)
             {
                 _interactCallbacks[i].Index = i;
                 _boolDrivers[i] = _interactCallbacks[i].GetComponents<BoolDriver>()
                     .AddRange(
                     _interactCallbacks[i].GetComponentsInChildren<BoolDriver>()
+                    );
+            }
+            if (isAuthorizedIndicator)
+            {
+                _isAuthorizedBoolDrivers = isAuthorizedIndicator.GetComponents<BoolDriver>()
+                    .AddRange(
+                        isAuthorizedIndicator.GetComponentsInChildren<BoolDriver>()
                     );
             }
         }
@@ -168,13 +203,6 @@ namespace nikkyai.toggle
                 _interactCallbacks[i].DisableInteractive = !isAuthorized;
             }
         }
-        public void TakeOwnership()
-        {
-            if (!Networking.IsOwner(gameObject))
-            {
-                Networking.SetOwner(Networking.LocalPlayer, gameObject);
-            }
-        }
 
         [NonSerialized] private int _interactIndex;
         public void _OnInteract()
@@ -183,8 +211,18 @@ namespace nikkyai.toggle
 
             TakeOwnership();
             Log($"interact {_interactIndex}");
-            SyncedIndex = _interactIndex;
-            RequestSerialization();
+            if(clickOnActiveDisables && SyncedIndex == _interactIndex)
+            {
+                SyncedIndex = disabledIndex;
+            }
+            else
+            {
+                SyncedIndex = _interactIndex;
+            }
+            if (synced)
+            {
+                RequestSerialization();
+            }
             OnDeserialization();
         }
 

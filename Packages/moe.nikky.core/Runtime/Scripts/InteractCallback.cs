@@ -7,8 +7,8 @@ namespace nikkyai
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class InteractCallback : ACLBase
-    {
-        [SerializeField] private int index;
+    { 
+        [SerializeField, HideInInspector] private int index;
 
         public int Index
         {
