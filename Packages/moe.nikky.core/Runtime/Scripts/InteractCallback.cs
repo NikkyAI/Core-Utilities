@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace nikkyai
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class InteractCallback : ACLBase
     { 
         [SerializeField, HideInInspector] private int index;
@@ -76,7 +76,10 @@ namespace nikkyai
         private bool _isInteracting = false;
         public override void Interact()
         {
+            if (_isInteracting) return;
+            if (!isAuthorized) return;
             _isInteracting = true;
+            Log($"interact on {index}");
             _UpdateHandlers(EVENT_INTERACT, index);
         }
 

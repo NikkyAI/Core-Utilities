@@ -249,7 +249,7 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 5637460926458460647}
   defaultValue: 0
   valueIndicator: {fileID: 1426628406371371301}
-  authorizedIndicator: {fileID: 0}
+  isAuthorizedIndicator: {fileID: 0}
   enforceACL: 1
   accessControl: {fileID: 0}
   debugLog: {fileID: 0}

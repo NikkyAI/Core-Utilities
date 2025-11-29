@@ -96,15 +96,19 @@ namespace nikkyai.toggle
             set
             {
                 if (!isAuthorized) return;
-                
+
+                var prevValue = _syncedIndex;
                 TakeOwnership();
+                Log($"set synced to {value}");
                 synced = value;
+                Log($"set index to {_syncedIndex} => {prevValue}");
+                _syncedIndex = prevValue;
                 
                 RequestSerialization();
             }
         }
 
-        [UdonSynced]
+        [UdonSynced, FieldChangeCallback(nameof(SyncedIndex))]
         private int _syncedIndex;
 
         public int SyncedIndex
@@ -112,10 +116,10 @@ namespace nikkyai.toggle
             private set
             {
                 var oldIndex = _syncedIndex;
-                _syncedIndex = value;
 
-                if (oldIndex != _syncedIndex)
+                if (oldIndex != value)
                 {
+                    _syncedIndex = value;
                     Log($"index changed {oldIndex} => {_syncedIndex}");
                     var remappedValue = RemapIndex(_syncedIndex);
                     // if (remapValues.Length - 1 >= _syncedIndex)
@@ -123,18 +127,10 @@ namespace nikkyai.toggle
                     //     remappedValue = remapValues[_syncedIndex];
                     // }
 
+                    
                     for (var i = 0; i < _intDrivers.Length; i++)
                     {
                         _intDrivers[i].UpdateInt(remappedValue);
-                    }
-
-                    var oldDrivers = _boolDrivers[oldIndex];
-                    if (oldDrivers != null)
-                    {
-                        for (var i = 0; i < oldDrivers.Length; i++)
-                        {
-                            oldDrivers[i].UpdateBool(false);
-                        }
                     }
 
                     var newDrivers = _boolDrivers[_syncedIndex];
@@ -143,6 +139,15 @@ namespace nikkyai.toggle
                         for (var i = 0; i < newDrivers.Length; i++)
                         {
                             newDrivers[i].UpdateBool(true);
+                        }
+                    }
+
+                    var oldDrivers = _boolDrivers[oldIndex];
+                    if (oldDrivers != null)
+                    {
+                        for (var i = 0; i < oldDrivers.Length; i++)
+                        {
+                            oldDrivers[i].UpdateBool(false);
                         }
                     }
                 }
@@ -160,6 +165,7 @@ namespace nikkyai.toggle
             SetupComponents();
             for (var i = 0; i < _interactCallbacks.Length; i++)
             {
+                Log($"register interact callback {i}");
                 _interactCallbacks[i]._Register(
                     eventIndex: InteractCallback.EVENT_INTERACT,
                     handler: this,
@@ -223,7 +229,7 @@ namespace nikkyai.toggle
             {
                 RequestSerialization();
             }
-            OnDeserialization();
+            // OnDeserialization();
         }
 
         public override void OnDeserialization()

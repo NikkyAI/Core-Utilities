@@ -77,7 +77,6 @@ namespace nikkyai.toggle
 
         [Header("State")] // header
         
-        [UdonSynced] private bool _isOn = false;
 
         [SerializeField, UdonSynced]
         private bool synced = true;
@@ -88,11 +87,33 @@ namespace nikkyai.toggle
             set
             {
                 if (!isAuthorized) return;
-                
+
+                var prevValue = _syncedState;
                 TakeOwnership();
+                Log($"set synced to {value}");
                 synced = value;
+                Log($"set normalized to {_syncedState} => {prevValue}");
+                _syncedState = prevValue;
                 
                 RequestSerialization();
+            }
+        }
+        
+        [UdonSynced, FieldChangeCallback(nameof(SyncedState))]
+        private bool _syncedState = false;
+
+        public bool SyncedState
+        {
+            get => _syncedState;
+            set {
+                _syncedState = value;
+                
+                Log($"SyncedState set to {_syncedState}");
+            
+                for (var i = 0; i < _valueBoolDrivers.Length; i++)
+                {
+                    _valueBoolDrivers[i].UpdateBool(_syncedState);
+                }
             }
         }
         
@@ -137,7 +158,7 @@ namespace nikkyai.toggle
             //     }
             // }
 
-            _isOn = defaultValue;
+            _syncedState = defaultValue;
             
             _valueBoolDrivers = valueIndicator.GetComponents<BoolDriver>()
                 .AddRange(
@@ -162,7 +183,7 @@ namespace nikkyai.toggle
             {
                 _isAuthorizedBoolDrivers[i].UpdateBool(isAuthorized);
             }
-            _UpdateState();
+            // _UpdateState();
         }
 
         public void SetState(bool newValue)
@@ -173,7 +194,7 @@ namespace nikkyai.toggle
                 Networking.SetOwner(Networking.LocalPlayer, gameObject);
             }
 
-            _isOn = newValue;
+            _syncedState = newValue;
 
             if (synced)
             {
@@ -189,7 +210,7 @@ namespace nikkyai.toggle
                 Networking.SetOwner(Networking.LocalPlayer, gameObject);
             }
 
-            _isOn = defaultValue;
+            _syncedState = defaultValue;
             if (synced)
             {
                 RequestSerialization();
@@ -211,28 +232,27 @@ namespace nikkyai.toggle
                 Networking.SetOwner(Networking.LocalPlayer, gameObject);
             }
 
-            _isOn = !_isOn;
-            _UpdateState();
+            SyncedState = !SyncedState;
+            // _UpdateState();
             if (synced)
             {
                 RequestSerialization();
             }
         }
 
-        private void _UpdateState()
-        {
-            if (!isAuthorized) return;
-            Log($"_UpdateState {_isOn}");
-            
-            for (var i = 0; i < _valueBoolDrivers.Length; i++)
-            {
-                _valueBoolDrivers[i].UpdateBool(_isOn);
-            }
-        }
+        // private void _UpdateState()
+        // {
+        //     Log($"_UpdateState {_syncedState}");
+        //     
+        //     for (var i = 0; i < _valueBoolDrivers.Length; i++)
+        //     {
+        //         _valueBoolDrivers[i].UpdateBool(_syncedState);
+        //     }
+        // }
 
         public override void OnDeserialization()
         {
-            _UpdateState();
+            // _UpdateState();
         }
 
         [NonSerialized] private string prevLabel;
