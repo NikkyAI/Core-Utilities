@@ -98,7 +98,7 @@ namespace nikkyai.toggle
                 RequestSerialization();
             }
         }
-        
+
         [UdonSynced, FieldChangeCallback(nameof(SyncedState))]
         private bool _syncedState = false;
 
@@ -133,32 +133,7 @@ namespace nikkyai.toggle
 
         protected override void _Init()
         {
-            // if (button == null)
-            // {
-            //     button = gameObject;
-            // }
-            //
-            // if (buttonCollider == null)
-            // {
-            //     buttonCollider = button.GetComponent<Collider>();
-            // }
-
             DisableInteractive = true;
-
-            // if (button != null) button.SetActive(!offIfNotUsable);
-            // if (buttonCollider != null) buttonCollider.enabled = !offIfNotUsable;
-
-            // if (!string.IsNullOrEmpty(label))
-            // {
-            //     var labelText = (label.Trim() + "\n" + label2.Trim()).Trim('\n', ' ');
-            //     InteractionText = (label.Trim() + " " + label2.Trim()).Trim('\n', ' ', '-');
-            //     if (tmpLabel)
-            //     {
-            //         tmpLabel.text = labelText;
-            //     }
-            // }
-
-            _syncedState = defaultValue;
             
             _valueBoolDrivers = valueIndicator.GetComponents<BoolDriver>()
                 .AddRange(
@@ -171,6 +146,10 @@ namespace nikkyai.toggle
                         isAuthorizedIndicator.GetComponentsInChildren<BoolDriver>()
                     );
             }
+
+            LogWarning("setting default value");
+            SyncedState = defaultValue;
+            LogWarning("done setting default value");
             
             OnDeserialization();
         }
@@ -194,13 +173,13 @@ namespace nikkyai.toggle
                 Networking.SetOwner(Networking.LocalPlayer, gameObject);
             }
 
-            _syncedState = newValue;
+            SyncedState = newValue;
 
             if (synced)
             {
                 RequestSerialization();
             }
-            OnDeserialization();
+            // OnDeserialization();
         }
 
         public void Reset()
@@ -215,7 +194,7 @@ namespace nikkyai.toggle
             {
                 RequestSerialization();
             }
-            OnDeserialization();
+            // OnDeserialization();
         }
 
         public override void Interact()

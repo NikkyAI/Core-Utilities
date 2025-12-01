@@ -465,7 +465,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 35630e38b4e5ffb40b44ec5348b4333f, type: 2}
     - target: {fileID: 7438426917054625217, guid: 1ac75656e384b784585721b4a65133ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.317
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7438426917054625217, guid: 1ac75656e384b784585721b4a65133ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1044,6 +1044,10 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 6811083250648103044, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
+    - target: {fileID: 6811083250648103044, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
+      propertyPath: serializationData.SerializedFormat
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8913457419501256532, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: serializationData.Prefab
       value: 
