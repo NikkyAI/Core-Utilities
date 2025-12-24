@@ -39,46 +39,8 @@ namespace nikkyai.toggle
         [FormerlySerializedAs("drivers")]
         [SerializeField] private Transform selectionIndicator;
         [SerializeField] private Transform isAuthorizedIndicator;
-
-        #region ACL
-
-        [Header("Access Control")] // header
-        [SerializeField]
-        private bool enforceACL = true;
-
-        protected override bool EnforceACL
-        {
-            get => enforceACL;
-            set => enforceACL = value;
-        }
-
-        [Tooltip("ACL used to check who can use the toggle"),
-         SerializeField]
-        private AccessControl accessControl;
-
-        protected override AccessControl AccessControl
-        {
-            get => accessControl;
-            set => accessControl = value;
-        }
-
-        #endregion
-
-        #region Debug
-
-        [Header("Debug")] // header
-        [SerializeField]
-        private DebugLog debugLog;
-
-        protected override DebugLog DebugLog
-        {
-            get => debugLog;
-            set => debugLog = value;
-        }
-
+        
         protected override string LogPrefix => $"{nameof(ExclusiveToggle)} {name}";
-
-        #endregion
 
         private InteractCallback[] _interactCallbacks = { };
         private IntDriver[] _intDrivers;
@@ -178,27 +140,18 @@ namespace nikkyai.toggle
         private void SetupComponents()
         {
             _syncedIndex = defaultIndex;
-            _intDrivers = selectionIndicator.GetComponents<IntDriver>()
-                .AddRange(
-                selectionIndicator.GetComponentsInChildren<IntDriver>()
-                );
+            _intDrivers = selectionIndicator.GetComponentsInChildren<IntDriver>();
             _interactCallbacks = GetComponentsInChildren<InteractCallback>();
             _boolDrivers = new BoolDriver[_interactCallbacks.Length][];
             
             for (var i = 0; i < _interactCallbacks.Length; i++)
             {
                 _interactCallbacks[i].Index = i;
-                _boolDrivers[i] = _interactCallbacks[i].GetComponents<BoolDriver>()
-                    .AddRange(
-                    _interactCallbacks[i].GetComponentsInChildren<BoolDriver>()
-                    );
+                _boolDrivers[i] = _interactCallbacks[i].GetComponentsInChildren<BoolDriver>();
             }
             if (isAuthorizedIndicator)
             {
-                _isAuthorizedBoolDrivers = isAuthorizedIndicator.GetComponents<BoolDriver>()
-                    .AddRange(
-                        isAuthorizedIndicator.GetComponentsInChildren<BoolDriver>()
-                    );
+                _isAuthorizedBoolDrivers = isAuthorizedIndicator.GetComponentsInChildren<BoolDriver>();
             }
         }
 
@@ -252,14 +205,14 @@ namespace nikkyai.toggle
             UnityEditor.EditorUtility.SetDirty(this);
 
             if (!childrenInitialized
-                || prevAccessControl != accessControl
-                || prevEnforceACL != enforceACL
-                || prevDebugLog != debugLog
+                || prevAccessControl != AccessControl
+                || prevEnforceACL != EnforceACL
+                || prevDebugLog != DebugLog
                )
             {
                 ApplyACLsAndLog();
-                prevAccessControl = accessControl;
-                prevDebugLog = debugLog;
+                prevAccessControl = AccessControl;
+                prevDebugLog = DebugLog;
                 childrenInitialized = true;
             }
 
@@ -308,9 +261,9 @@ namespace nikkyai.toggle
             {
                 var interactCallback = children[index];
                 interactCallback.Index = index;
-                interactCallback.EditorACL = accessControl;
-                interactCallback.EditorDebugLog = debugLog;
-                interactCallback.EditorEnforceACL = enforceACL;
+                interactCallback.EditorACL = AccessControl;
+                interactCallback.EditorDebugLog = DebugLog;
+                interactCallback.EditorEnforceACL = EnforceACL;
                 interactCallback.MarkDirty();
             }
         }

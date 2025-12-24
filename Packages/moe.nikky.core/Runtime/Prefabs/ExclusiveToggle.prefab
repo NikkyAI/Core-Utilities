@@ -55,6 +55,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4328102162079823317}
+  debugLog: {fileID: 0}
   textMeshPro: {fileID: 349550839313980267}
   valueDisplayFormat: 00
 --- !u!114 &4328102162079823317
@@ -145,15 +146,15 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4344727995114894573}
+  debugLog: {fileID: 7782521981869770829}
+  enforceACL: 1
+  accessControl: {fileID: 0}
   defaultIndex: 1
   clickOnActiveDisables: 0
   disabledIndex: 0
   remapValues: 0100000002000000030000000400000005000000
   selectionIndicator: {fileID: 4544651485293442018}
   isAuthorizedIndicator: {fileID: 0}
-  enforceACL: 1
-  accessControl: {fileID: 0}
-  debugLog: {fileID: 7782521981869770829}
   synced: 1
 --- !u!114 &4344727995114894573
 MonoBehaviour:

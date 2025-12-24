@@ -6,10 +6,14 @@ namespace nikkyai.common
 {
     public abstract class LoggerBase : EventBase
     {
-        protected virtual DebugLog DebugLog
+        [Header("Debug")] // header
+        [SerializeField]
+        private DebugLog debugLog;
+
+        protected DebugLog DebugLog
         {
-            get => null;
-            set { }
+            get => debugLog;
+            private set => debugLog = value;
         }
 
         protected abstract string LogPrefix { get; }

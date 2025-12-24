@@ -55,6 +55,7 @@ namespace nikkyai.driver.audiolink
         
         public override void UpdateFloat(float value)
         {
+            if (!enabled) return;
             _audioLinkUI.SetFloat(_propertyId, value);
 
             if (field == AudiolinkField.Bass)

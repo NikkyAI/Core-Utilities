@@ -34,7 +34,14 @@ namespace nikkyai.driver.udon
             for (var i = 0; i < externalBehaviours.Length; i++)
             {
                 externalBehaviours[i].SetProgramVariable(floatField, value);
-                externalBehaviours[i].SendCustomEvent(eventName);
+            }
+
+            if (eventName.Length > 0)
+            {
+                for (var i = 0; i < externalBehaviours.Length; i++)
+                {
+                    externalBehaviours[i].SendCustomEvent(eventName);
+                }
             }
         }
 

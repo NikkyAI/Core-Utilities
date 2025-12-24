@@ -4,15 +4,12 @@ using VRC.SDKBase;
 
 namespace nikkyai.driver.material
 {
-    public class FloatMaterialPropertyDriver : FloatDriver
+    public class MaterialIntToggleBoolDriver : BoolDriver
     {
-        private float _lastValue = 0.0f;
         [SerializeField] private Material[] materials;
         [SerializeField] private string[] propertyNames = { };
         private int[] _propertyIds = { };
-
-        protected override string LogPrefix => nameof(FloatMaterialPropertyDriver);
-
+        protected override string LogPrefix => nameof(MaterialIntToggleBoolDriver);
         private void Start()
         {
             _EnsureInit();
@@ -34,36 +31,30 @@ namespace nikkyai.driver.material
             }
         }
 
-        public override void UpdateFloat(float value)
+        public override void UpdateBool(bool value)
         {
             if (!enabled) return;
-            if (_lastValue == value) return;
-            // Log($"UpdateFloat {value} on {materials.Length} materials {_propertyIds.Length} properties");
+            var intVal = value ? 1 : 0;
             for (var i = 0; i < materials.Length; i++)
             {
                 var mat = materials[i];
                 for (var j = 0; j < _propertyIds.Length; j++)
                 {
-                    if (_lastValue != value)
-                    {
-                        Log($"Set {propertyNames[j]} to {value}");
-                        mat.SetFloat(_propertyIds[j], value);
-                    }
+                    Log($"Set {propertyNames[j]} to {intVal} {value}");
+                    mat.SetInt(_propertyIds[j], intVal);
                 }
-
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
-                mat.MarkDirty();
+                materials[i].MarkDirty();
 #endif
             }
-
-            _lastValue = value;
         }
-
+    
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
-        public override void ApplyFloatValue(float value)
+        public override void ApplyBoolValue(bool value)
         {
             InitProperties();
-            UpdateFloat(value);
+            
+            UpdateBool(value);
         }
 #endif
     }

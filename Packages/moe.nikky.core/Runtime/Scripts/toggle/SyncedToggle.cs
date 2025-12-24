@@ -36,48 +36,9 @@ namespace nikkyai.toggle
 
         [SerializeField] private Transform isAuthorizedIndicator;
 
-        #region ACL
-
-        [Header("Access Control")] // header
-        [SerializeField]
-        private bool enforceACL = true;
-
-        protected override bool EnforceACL
-        {
-            get => enforceACL;
-            set => enforceACL = value;
-        }
-
-        [Tooltip("ACL used to check who can use the toggle")] [SerializeField]
-        private AccessControl accessControl;
-
-        protected override AccessControl AccessControl
-        {
-            get => accessControl;
-            set => accessControl = value;
-        }
-
-        #endregion
-
-        #region Debug
-
-        [Header("Debug")] // header
-        [SerializeField]
-        private DebugLog debugLog;
-
         protected override string LogPrefix => $"{nameof(SyncedToggle)} {name}";
 
-        protected override DebugLog DebugLog
-        {
-            get => debugLog;
-            set => debugLog = value;
-        }
-
-        #endregion
-
         [Header("State")] // header
-        
-
         [SerializeField, UdonSynced]
         private bool synced = true;
 
@@ -135,16 +96,10 @@ namespace nikkyai.toggle
         {
             DisableInteractive = true;
             
-            _valueBoolDrivers = valueIndicator.GetComponents<BoolDriver>()
-                .AddRange(
-                    valueIndicator.GetComponentsInChildren<BoolDriver>()
-                );
+            _valueBoolDrivers = valueIndicator.GetComponentsInChildren<BoolDriver>();
             if (isAuthorizedIndicator)
             {
-                _isAuthorizedBoolDrivers = isAuthorizedIndicator.GetComponents<BoolDriver>()
-                    .AddRange(
-                        isAuthorizedIndicator.GetComponentsInChildren<BoolDriver>()
-                    );
+                _isAuthorizedBoolDrivers = isAuthorizedIndicator.GetComponentsInChildren<BoolDriver>();
             }
 
             LogWarning("setting default value");
@@ -167,7 +122,7 @@ namespace nikkyai.toggle
 
         public void SetState(bool newValue)
         {
-            if (enforceACL && !isAuthorized) return;
+            if (!isAuthorized) return;
             if (!Networking.IsOwner(gameObject))
             {
                 Networking.SetOwner(Networking.LocalPlayer, gameObject);
@@ -204,7 +159,7 @@ namespace nikkyai.toggle
 
         public void _Interact()
         {
-            if (enforceACL && !isAuthorized) return;
+            if (!isAuthorized) return;
 
             if (!Networking.IsOwner(gameObject))
             {

@@ -1,4 +1,5 @@
 ﻿using Texel;
+using UnityEngine;
 using VRC.SDKBase;
 
 namespace nikkyai.common
@@ -7,9 +8,28 @@ namespace nikkyai.common
     public abstract class ACLBase: LoggerBase
     {
         // protected AccessControl accessControl;
-        protected virtual AccessControl AccessControl { get; set; }
-        protected abstract bool EnforceACL { get; set; }
+        // protected virtual AccessControl AccessControl { get; set; }
+        // protected abstract bool EnforceACL { get; set; }
+        
+        [Header("Access Control")] // header
+        [SerializeField]
+        private bool enforceACL = true;
 
+        protected bool EnforceACL
+        {
+            get => enforceACL;
+            private set => enforceACL = value;
+        }
+
+        [Tooltip("ACL used to check who can use the toggle")] [SerializeField]
+        private AccessControl accessControl;
+
+        protected AccessControl AccessControl
+        {
+            get => accessControl;
+            private set => accessControl = value;
+        }
+        
         protected bool isAuthorized;
 
         protected override void _PostInit()

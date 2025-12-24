@@ -10,6 +10,7 @@ namespace nikkyai.driver.animator
         protected override string LogPrefix => $"AnimatorFloatDriver {name}";
         public override void UpdateFloat(float value)
         {
+            if (!enabled) return;
             animator.SetFloat(floatParameterName, value);
         }
     }

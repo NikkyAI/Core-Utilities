@@ -15,43 +15,9 @@ namespace nikkyai
             get => index;
             set => index = value;
         }
-
-        #region ACL
-        [Header("Access Control")] // header
-        public bool enforceACL;
-
-        protected override bool EnforceACL
-        {
-            get => enforceACL;
-            set => enforceACL = value;
-        }
-
-        [Tooltip("ACL used to check who can use the toggle")] [SerializeField]
-        public AccessControl accessControl;
-
-
-        protected override AccessControl AccessControl
-        {
-            get => accessControl;
-            set => accessControl = value;
-        }
-
-        #endregion
-
-        #region Debug
         
-        [Header("Debug")] // header
-        [SerializeField]
-        private DebugLog debugLog;
-
-        protected override DebugLog DebugLog
-        {
-            get => debugLog;
-            set => debugLog = value;
-        }
         protected override string LogPrefix => nameof(InteractCallback);
 
-        #endregion
 
         public const int EVENT_INTERACT = 0;
 

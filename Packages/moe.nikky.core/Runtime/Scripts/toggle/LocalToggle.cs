@@ -28,36 +28,6 @@ namespace nikkyai.toggle
         [SerializeField]
         private string dataKey = "CHANGE THIS";
 
-        [FormerlySerializedAs("useACL")]
-        [Header("Access Control")] // header
-        [SerializeField]
-        private bool enforceAcl;
-
-        protected override bool EnforceACL
-        {
-            get => enforceAcl;
-            set => enforceAcl = value;
-        }
-
-        [Tooltip("ACL used to check who can use the toggle")] [SerializeField]
-        private AccessControl accessControl;
-
-        protected override AccessControl AccessControl
-        {
-            get => accessControl;
-            set => accessControl = value;
-        }
-
-        [Header("Debug")] // header
-        [SerializeField]
-        private DebugLog debugLog;
-
-        protected override DebugLog DebugLog
-        {
-            get => debugLog;
-            set => debugLog = value;
-        }
-
         protected override string LogPrefix => nameof(LocalToggle);
 
         private bool _isOn;
@@ -78,7 +48,7 @@ namespace nikkyai.toggle
         protected override void _Init()
         {
             _isOn = defaultValue;
-            _boolDrivers = GetComponents<BoolDriver>();
+            _boolDrivers = GetComponentsInChildren<BoolDriver>();
             _UpdateState();
         }
 
@@ -108,7 +78,7 @@ namespace nikkyai.toggle
 
         public override void Interact()
         {
-            if (enforceAcl && !isAuthorized) return;
+            if (!isAuthorized) return;
 
             _isOn = !_isOn;
             _UpdateState();

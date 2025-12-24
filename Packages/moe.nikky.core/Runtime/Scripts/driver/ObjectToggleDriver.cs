@@ -11,6 +11,7 @@ namespace nikkyai.driver
 
         public override void UpdateBool(bool value)
         {
+            if (!enabled) return;
             foreach (var obj in targetsOn)
             {
                 if (obj)

@@ -10,7 +10,14 @@ namespace nikkyai.driver.animator
 
         public override void UpdateInt(int value)
         {
+            if (!enabled) return;
             animator.SetInteger(intParameterName, value);
         }
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
+        public override void ApplyIntValue(int value)
+        {
+            base.ApplyIntValue(value);
+        }
+#endif
     }
 }

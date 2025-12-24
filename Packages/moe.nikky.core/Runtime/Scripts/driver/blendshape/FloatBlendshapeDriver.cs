@@ -38,6 +38,7 @@ namespace nikkyai.driver.blendshape
 
         public override void UpdateFloat(float value)
         {
+            if (!enabled) return;
             // if (value <= 0f)
             // {
             //     LogError("value must be greater than 0");
