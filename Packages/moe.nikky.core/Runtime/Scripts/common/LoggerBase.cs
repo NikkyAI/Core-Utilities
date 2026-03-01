@@ -13,7 +13,7 @@ namespace nikkyai.common
         protected DebugLog DebugLog
         {
             get => debugLog;
-            private set => debugLog = value;
+            set => debugLog = value;
         }
 
         protected abstract string LogPrefix { get; }

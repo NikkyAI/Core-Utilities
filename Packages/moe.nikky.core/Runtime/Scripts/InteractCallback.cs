@@ -18,7 +18,6 @@ namespace nikkyai
         
         protected override string LogPrefix => nameof(InteractCallback);
 
-
         public const int EVENT_INTERACT = 0;
 
         public const int EVENT_RELEASE = 1;

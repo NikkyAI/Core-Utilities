@@ -34,7 +34,7 @@ namespace nikkyai.toggle
 
         public bool IsOn => _isOn;
 
-        public const int EVENT_UPdATE = 0;
+        public const int EVENT_UPDATE = 0;
         public const int EVENT_COUNT = 1;
 
         protected override int EventCount => EVENT_COUNT;
@@ -97,7 +97,7 @@ namespace nikkyai.toggle
                 _boolDrivers[i].UpdateBool(_isOn);
             }
 
-            _UpdateHandlers(EVENT_UPdATE);
+            _UpdateHandlers(EVENT_UPDATE);
         }
     }
 }
