@@ -8,13 +8,13 @@ using UnityEngine;
 namespace nikkyai
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    public class InteractTrigger : ACLBase
+    public class TriggerButton : ACLBase
     {
         [Header("Drivers")] // header
         [SerializeField] private Transform triggerHolder;
         [SerializeField] private Transform isAuthorizedIndicator;
 
-        protected override string LogPrefix => $"{nameof(InteractTrigger)} {name}";
+        protected override string LogPrefix => $"{nameof(TriggerButton)} {name}";
     
         private TriggerDriver[] _triggerDrivers = { };
         private BoolDriver[] _isAuthorizedBoolDrivers = { };
@@ -32,6 +32,7 @@ namespace nikkyai
             }
 
             _triggerDrivers = triggerHolder.GetComponentsInChildren<TriggerDriver>();
+            Log($"Found {_triggerDrivers.Length} trigger drivers");
             if (isAuthorizedIndicator)
             {
                 _isAuthorizedBoolDrivers = isAuthorizedIndicator.GetComponentsInChildren<BoolDriver>();

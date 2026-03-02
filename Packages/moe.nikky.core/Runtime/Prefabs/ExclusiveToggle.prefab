@@ -425,42 +425,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 2b743a04e5571a447bf74d6ede563d53, type: 2}
     - target: {fileID: 7438426916000396222, guid: 1ac75656e384b784585721b4a65133ad, type: 3}
-      propertyPath: m_Text
-      value: '
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        [    0.000] [TouchFader Touch Fader]
-        found 1 drivers for value
-
-        [    0.000] [TouchFader Touch Fader] found
-        0 drivers for target'
-      objectReference: {fileID: 0}
-    - target: {fileID: 7438426916000396222, guid: 1ac75656e384b784585721b4a65133ad, type: 3}
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 2100000, guid: 35630e38b4e5ffb40b44ec5348b4333f, type: 2}
