@@ -1,10 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using nikkyai.common;
-using nikkyai.driver;
-using UnityEngine;
-using VRC.SDKBase;
+﻿using VRC.SDKBase;
 
-namespace nikkyai.Kinetic_Controls
+namespace nikkyai.common
 {
     public abstract class BaseSyncedBehaviour: ACLBase
     {

@@ -8,7 +8,7 @@ namespace nikkyai.driver
         protected override string LogPrefix => nameof(TriggerRandom);
 
     
-        [SerializeField] private ExclusiveToggle[] targetToggles;
+        [SerializeField] private Selector[] targetToggles;
         [SerializeField] private int minIndex = 0;
         [SerializeField] private int maxIndex = 16;
 

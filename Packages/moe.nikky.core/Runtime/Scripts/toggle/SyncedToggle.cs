@@ -2,7 +2,6 @@
 using nikkyai.ArrayExtensions;
 using nikkyai.common;
 using nikkyai.driver;
-using nikkyai.Kinetic_Controls;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;

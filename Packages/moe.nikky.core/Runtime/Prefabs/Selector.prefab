@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6082233618394679795}
   - component: {fileID: 4344727995114894573}
   m_Layer: 0
-  m_Name: ExclusiveToggle
+  m_Name: Selector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -523,7 +523,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2926529550126620808, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: m_Name
-      value: Toggle (1)
+      value: Selector Item 2
       objectReference: {fileID: 0}
     - target: {fileID: 4713205973828732992, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -633,7 +633,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2926529550126620808, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: m_Name
-      value: Toggle (3)
+      value: Selector Item 4
       objectReference: {fileID: 0}
     - target: {fileID: 4713205973828732992, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -739,7 +739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2926529550126620808, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: m_Name
-      value: Toggle (4)
+      value: Selector Item 5
       objectReference: {fileID: 0}
     - target: {fileID: 4713205973828732992, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -845,7 +845,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2926529550126620808, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: m_Name
-      value: Toggle (2)
+      value: Selector Item 3
       objectReference: {fileID: 0}
     - target: {fileID: 4713205973828732992, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -947,7 +947,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2926529550126620808, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: m_Name
-      value: Toggle
+      value: Selector Item 1
       objectReference: {fileID: 0}
     - target: {fileID: 4713205973828732992, guid: 8b67e1b8ca9c9e34498308b8b26b340e, type: 3}
       propertyPath: m_LocalPosition.x

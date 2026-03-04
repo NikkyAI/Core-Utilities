@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 6280973461286357974}
   - component: {fileID: 2573194583304611563}
   m_Layer: 0
-  m_Name: ExclusiveToggleItem
+  m_Name: SelectorItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

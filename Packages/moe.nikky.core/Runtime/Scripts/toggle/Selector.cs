@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using nikkyai.ArrayExtensions;
 using nikkyai.common;
 using nikkyai.driver;
-using nikkyai.Kinetic_Controls;
 using Texel;
 using UdonSharp;
 using UnityEngine;
@@ -15,9 +14,9 @@ using VRC.SDKBase;
 namespace nikkyai.toggle
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public class ExclusiveToggle : BaseSyncedBehaviour
+    public class Selector : BaseSyncedBehaviour
     {
-        [SerializeField, Min(0)] private int defaultIndex;
+        [SerializeField, Min(0)] private int defaultIndex = 0;
         [SerializeField] private bool clickOnActiveDisables = false;
         [SerializeField, Min(0)] private int disabledIndex = 0;
         [SerializeField] private int[] remapValues = { };
@@ -40,7 +39,7 @@ namespace nikkyai.toggle
         [SerializeField] private Transform selectionIndicator;
         [SerializeField] private Transform isAuthorizedIndicator;
         
-        protected override string LogPrefix => $"{nameof(ExclusiveToggle)} {name}";
+        protected override string LogPrefix => $"{nameof(Selector)} {name}";
 
         private InteractCallback[] _interactCallbacks = { };
         private IntDriver[] _intDrivers;
@@ -163,6 +162,11 @@ namespace nikkyai.toggle
             for (var i = 0; i < _interactCallbacks.Length; i++)
             {
                 _interactCallbacks[i].DisableInteractive = !isAuthorized;
+            }
+
+            for (var i = 0; i < _isAuthorizedBoolDrivers.Length; i++)
+            {
+                _isAuthorizedBoolDrivers[i].UpdateBool(isAuthorized);
             }
         }
 
