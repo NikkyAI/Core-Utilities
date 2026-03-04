@@ -2,7 +2,7 @@
 
 ## Install
 
-add your VCC: [click here](vcc://vpm/addRepo?url=https%3A%2F%2Fnikkyai.github.io%2Fvpm%2Findex.json)  
+VCC: https://nikkyai.github.io/vpm  
 using https://vrc-get.anatawa12.com/en/alcom/ is highly recommended
 
 
