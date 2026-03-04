@@ -50,7 +50,7 @@ public class FloatCyclingDriver : FloatDriver
     private float _lastServerTime = 0;
     private int _frames = 0;
 
-    private float velocity;
+    private float _velocity;
     private void Update()
     {
         var time = (float) Networking.GetServerTimeInSeconds();
@@ -92,7 +92,7 @@ public class FloatCyclingDriver : FloatDriver
             _smoothedCurrent = Mathf.SmoothDampAngle(
                 current: _smoothedCurrent,
                 target: targetValue,
-                currentVelocity: ref velocity,
+                currentVelocity: ref _velocity,
                 smoothTime: 0.1f, 
                 maxSpeed: 10f,
                 deltaTime: deltaTime * smoothingUpdateInterval

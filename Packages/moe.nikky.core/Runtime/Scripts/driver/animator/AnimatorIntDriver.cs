@@ -6,7 +6,7 @@ namespace nikkyai.driver.animator
     {
         [SerializeField] private Animator animator;
         [SerializeField] private string intParameterName;
-        protected override string LogPrefix => $"AnimatorIntDriver {name}";
+        protected override string LogPrefix => $"{nameof(AnimatorIntDriver)} {name}";
 
         public override void UpdateInt(int value)
         {

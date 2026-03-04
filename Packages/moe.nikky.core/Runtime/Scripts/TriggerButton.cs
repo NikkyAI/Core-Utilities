@@ -36,6 +36,7 @@ namespace nikkyai
             if (isAuthorizedIndicator)
             {
                 _isAuthorizedBoolDrivers = isAuthorizedIndicator.GetComponentsInChildren<BoolDriver>();
+                Log($"Found {_isAuthorizedBoolDrivers.Length} isAuthorized bool drivers");
             }
         }
 
@@ -52,6 +53,7 @@ namespace nikkyai
         public override void Interact()
         {
             if (!isAuthorized) return;
+            Log("Trigger executing");
             for (var i = 0; i < _triggerDrivers.Length; i++)
             {
                 _triggerDrivers[i].Trigger();

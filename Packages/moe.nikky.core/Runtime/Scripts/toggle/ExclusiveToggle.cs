@@ -47,7 +47,6 @@ namespace nikkyai.toggle
         private BoolDriver[][] _boolDrivers;
         private BoolDriver[] _isAuthorizedBoolDrivers = { };
 
-
         [Header("State")] // header
         [SerializeField, UdonSynced]
         private bool synced = true;
@@ -75,7 +74,8 @@ namespace nikkyai.toggle
 
         public int SyncedIndex
         {
-            private set
+            get => _syncedIndex;
+            set
             {
                 var oldIndex = _syncedIndex;
 
@@ -113,8 +113,11 @@ namespace nikkyai.toggle
                         }
                     }
                 }
+                if (synced)
+                {
+                    RequestSerialization();
+                }
             }
-            get => _syncedIndex;
         }
 
         private void Start()
@@ -178,11 +181,6 @@ namespace nikkyai.toggle
             {
                 SyncedIndex = _interactIndex;
             }
-            if (synced)
-            {
-                RequestSerialization();
-            }
-            // OnDeserialization();
         }
 
         public override void OnDeserialization()

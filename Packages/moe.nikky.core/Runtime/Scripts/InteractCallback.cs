@@ -15,18 +15,15 @@ namespace nikkyai
             get => index;
             set => index = value;
         }
-        
-        protected override string LogPrefix => nameof(InteractCallback);
+
+        protected override string LogPrefix => $"{nameof(InteractCallback)} {name}";
 
         public const int EVENT_INTERACT = 0;
 
-        public const int EVENT_RELEASE = 1;
+        const int EVENT_RELEASE = 1;
         const int EVENT_COUNT = 2;
 
-        protected override int EventCount
-        {
-            get => EVENT_COUNT;
-        }
+        protected override int EventCount => EVENT_COUNT;
 
         void Start()
         {

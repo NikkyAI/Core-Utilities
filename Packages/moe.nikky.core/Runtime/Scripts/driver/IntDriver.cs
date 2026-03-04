@@ -10,7 +10,7 @@ namespace nikkyai.driver
     {
         public abstract void UpdateInt(int value);
         
-        // modern ui defaults for selector
+        // modern ui defaults for modern UI selector
         [NonSerialized, UsedImplicitly] public int selectedId;
         public void _SelectionChanged()
         {
