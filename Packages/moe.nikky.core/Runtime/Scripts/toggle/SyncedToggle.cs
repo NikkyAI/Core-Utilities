@@ -94,11 +94,13 @@ namespace nikkyai.toggle
         protected override void _Init()
         {
             DisableInteractive = true;
-            
+
             _valueBoolDrivers = valueIndicator.GetComponentsInChildren<BoolDriver>();
+            Log($"found {_valueBoolDrivers.Length} bool drivers");
             if (isAuthorizedIndicator)
             {
                 _isAuthorizedBoolDrivers = isAuthorizedIndicator.GetComponentsInChildren<BoolDriver>();
+                Log($"found {_isAuthorizedBoolDrivers.Length} auth indicator bool drivers");
             }
 
             LogWarning("setting default value");

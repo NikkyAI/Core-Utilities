@@ -7,5 +7,10 @@ namespace nikkyai.driver
     public abstract class TriggerDriver: LoggerBase
     {
         public abstract void Trigger();
+
+        public virtual void Release()
+        {
+            
+        }
     }
 }

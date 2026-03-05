@@ -1,12 +1,12 @@
 {
   "name": "moe.nikky.core",
   "displayName": "NikkyAI - Core",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "shared base classes and utilities",
   "changelogUrl": "https://github.com/NikkyAI/Core-Utilities/releases",
   "gitDependencies": {},
   "vpmDependencies": {
-    "com.llealloo.audiolink": "^2.1.0",
+    "com.llealloo.audiolink": "^3.1.2",
     "com.texelsaur.access": "^1.2.4",
     "com.texelsaur.misc": "^1.0.5"
   },

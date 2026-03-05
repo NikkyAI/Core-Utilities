@@ -114,6 +114,10 @@ namespace nikkyai.toggle
                 }
                 if (synced)
                 {
+                    if (!Networking.IsOwner(gameObject))
+                    {
+                        Networking.SetOwner(Networking.LocalPlayer, gameObject);
+                    }
                     RequestSerialization();
                 }
             }

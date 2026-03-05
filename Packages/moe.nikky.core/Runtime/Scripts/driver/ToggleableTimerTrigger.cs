@@ -10,7 +10,9 @@ namespace nikkyai.driver
         [SerializeField] [Min(5f)] private Vector2 delay = new Vector2(20.0f, 30.0f);
 
         [SerializeField] private bool onlyInstanceMaster = false;
-        [SerializeField] private TriggerDriver[] triggerDrivers;
+        [SerializeField] private Transform triggerDriverHolder;
+
+        private TriggerDriver[] _triggerDrivers = { };
 
         private float _minDelay, _maxDelay;
 
@@ -31,6 +33,18 @@ namespace nikkyai.driver
                 _minDelay = delay.y;
                 _maxDelay = delay.x;
             }
+
+            if (triggerDriverHolder == null)
+            {
+                triggerDriverHolder = transform;
+            }
+
+            if (triggerDriverHolder == null)
+            {
+                triggerDriverHolder = transform;
+            }
+            _triggerDrivers = triggerDriverHolder.GetComponentsInChildren<TriggerDriver>();
+            Log($"found {_triggerDrivers.Length} trigger drivers");
         }
 
         private bool _toggleState = false;
@@ -48,7 +62,6 @@ namespace nikkyai.driver
                 // start timer
                 if (!_timerRunning)
                 {
-                    _timerRunning = true;
                     TriggerTimer();
                 }
                 else
@@ -68,23 +81,21 @@ namespace nikkyai.driver
             Log("timer triggered");
             _timerRunning = false;
 
-            if (onlyInstanceMaster && !Networking.IsMaster)
+            if (!onlyInstanceMaster || Networking.IsMaster)
             {
-                return;
-            }
-
-            if (_toggleState)
-            {
-                foreach (var triggerDriver in triggerDrivers)
+                Log($"running triggers {_toggleState}");
+                if (_toggleState)
                 {
-                    triggerDriver.Trigger();
+                    foreach (var triggerDriver in _triggerDrivers)
+                    {
+                        triggerDriver.Trigger();
+                    }
                 }
-
-                // call timer on a delay
             }
-
-            if (!_timerRunning)
+            
+            if (!_timerRunning && _toggleState)
             {
+                // call timer on a delay
                 _timerRunning = true;
                 float nextDelay = Random.Range(_minDelay, _maxDelay);
                 SendCustomEventDelayedSeconds(nameof(TriggerTimer), nextDelay);
@@ -97,7 +108,7 @@ namespace nikkyai.driver
 
         public override void OnMasterTransferred(VRCPlayerApi newMaster)
         {
-            Debug.Log($"New master: {newMaster.displayName}");
+            Log($"New master: {newMaster.displayName}");
         }
     }
 }

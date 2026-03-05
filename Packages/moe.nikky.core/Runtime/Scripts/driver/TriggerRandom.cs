@@ -1,5 +1,6 @@
 ﻿using nikkyai.toggle;
 using UnityEngine;
+using VRC.SDKBase;
 
 namespace nikkyai.driver
 {
@@ -14,6 +15,7 @@ namespace nikkyai.driver
 
         public override void Trigger()
         {
+            Log("Trigger Random");
             foreach (var exclusiveToggle in targetToggles)
             {
                 // assign random index to exclusiveToggle
@@ -22,6 +24,10 @@ namespace nikkyai.driver
                 {
                     newIndex = Random.Range(minIndex, maxIndex);
                 }
+                // if (!Networking.IsOwner(exclusiveToggle.gameObject))
+                // {
+                //     Networking.SetOwner(Networking.LocalPlayer, exclusiveToggle.gameObject);
+                // }
                 exclusiveToggle.SyncedIndex = newIndex;
             }
         }
